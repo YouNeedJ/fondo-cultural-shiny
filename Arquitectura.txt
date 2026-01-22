@@ -1,0 +1,24 @@
+app/
+├─ app.R                     # entrypoint
+│
+├─ config/
+│  └─ settings.R             # lectura y validación de env vars
+│
+├─ modules/
+│  ├─ mod_home_ui.R
+│  ├─ mod_home_server.R
+│  └─ (otros módulos)
+│
+├─ services/
+│  ├─ mongo.R                # acceso MongoDB
+│  ├─ openai.R               # cliente OpenAI
+│  └─ logger.R               # logs centralizados
+│
+├─ www/
+│  ├─ styles.css             # CSS Bootstrap 5
+│  └─ js/                    # JS opcional
+│
+├─ renv.lock                 # dependencias R (prod-safe)
+├─ Dockerfile
+├─ docker-compose.yml
+└─ .env.example              # variables esperadas

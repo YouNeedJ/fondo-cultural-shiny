@@ -1,0 +1,7 @@
+
+jefalla_db_user
+rCb1W5mrGmSOlKqV
+
+mongodb+srv://jefalla_db_user:rCb1W5mrGmSOlKqV@fondocult.wn39nvo.mongodb.net/
+
+source("app/config/settings.R")
