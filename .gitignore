@@ -3,3 +3,6 @@
 .Rhistory
 .RData
 .DS_Store
+Datos/
+*.xlsx
+Mongo.txt
