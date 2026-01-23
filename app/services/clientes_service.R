@@ -5,7 +5,8 @@
 
 library(stringi)
 
-# mongo.R ya se carga en app.R y se inicializa con init_mongo(CONFIG)
+# mongo.R ya se carga en app.R y se inicializa con init_mongo(CONFIG) 
+# este es
 
 
 # --------------------------------------------------

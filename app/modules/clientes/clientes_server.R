@@ -19,26 +19,24 @@ clientes_server <- function(id) {
 # Cargar ciudades (formulario y filtros)
 # --------------------------------------------------
 	observe({
+	  ciudades <- get_ciudades()
 
-		ciudades <- get_ciudades()
+	  # Actualizar selectize dentro del módulo usando ns
+	  updateSelectizeInput(
+		session,
+		session$ns("ciudad"),
+		choices = ciudades,
+		server = TRUE
+	  )
 
-		# Formulario (Gestión de Clientes)
-		updateSelectizeInput(
-			session,
-			"ciudad",
-			choices = ciudades,
-			server = TRUE
-		)
-
-		# Filtros (Análisis de Clientes)
-		updateSelectizeInput(
-			session,
-			"filtro_ciudad",
-			choices = ciudades,
-			server = TRUE
-		)
-
+	  updateSelectizeInput(
+		session,
+		session$ns("filtro_ciudad"),
+		choices = ciudades,
+		server = TRUE
+	  )
 	})
+
 
 
 
