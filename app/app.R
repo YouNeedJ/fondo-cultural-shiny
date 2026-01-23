@@ -108,11 +108,19 @@ server <- function(input, output, session) {
 	# --------------------------------------------------
 	# Activar módulos cuando el usuario está logueado
 	# --------------------------------------------------
-	observe({
+	observeEvent(app_state$logged, {
 	  if (isTRUE(app_state$logged)) {
+
+		# Render inicial por defecto
+		output$main_content <- renderUI({
+		  clientes_ui("clientes")
+		})
+
+		# Activar server del módulo
 		clientes_server("clientes")
 	  }
 	})
+
 
 
 }

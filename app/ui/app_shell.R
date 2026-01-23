@@ -13,11 +13,16 @@ app_shell_ui <- function(app_state) {
     ),
 
     div(class = "container-fluid mt-3",
-      nav(
-        class = "nav nav-pills mb-3",
-        a(class = "nav-link", href = "#clientes", "Clientes"),
-        a(class = "nav-link", href = "#temas", "Temas")
-      ),
+		tags$ul(
+	  class = "nav nav-pills mb-3",
+	  tags$li(class = "nav-item",
+		actionLink("nav_clientes", "Clientes", class = "nav-link")
+	  ),
+	  tags$li(class = "nav-item",
+		actionLink("nav_temas", "Temas", class = "nav-link")
+	  )
+	),
+
 
       div(id = "main_content")
     )
