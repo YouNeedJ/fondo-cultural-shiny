@@ -24,7 +24,8 @@ app_shell_ui <- function(app_state) {
 	),
 
 
-      div(id = "main_content")
+     uiOutput("main_content")
+
     )
   )
 }
