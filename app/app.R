@@ -77,6 +77,20 @@ server <- function(input, output, session) {
 
 	# Login server
 	login_server("login", app_state)
+	
+	# Navegación entre módulos
+	observeEvent(input$nav_clientes, {
+	  output$main_content <- renderUI({
+		clientes_ui("clientes")
+	  })
+	})
+
+	observeEvent(input$nav_temas, {
+	  output$main_content <- renderUI({
+		div("Módulo Temas (pendiente)")
+	  })
+	})
+
 
 	# Logout
 	observeEvent(input$logout, {
