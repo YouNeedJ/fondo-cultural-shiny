@@ -39,11 +39,17 @@ init_openai(CONFIG)
 # 4. UI base
 # --------------------------------------------------
 ui <- fluidPage(
-	tags$head(
-		tags$link(rel = "stylesheet", type = "text/css", href = "styles.css")
-	),
-	uiOutput("app_ui")
+  theme = bs_theme(
+    version = 5,
+    bootswatch = "flatly",  # <- tema Bootstrap 5 bonito
+    base_font = font_google("Inter")
+  ),
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "styles.css")
+  ),
+  uiOutput("app_ui")
 )
+
 
 
 # --------------------------------------------------
@@ -61,12 +67,13 @@ server <- function(input, output, session) {
 	
 	
 	output$app_ui <- renderUI({
-		if (!app_state$logged) {
-			login_ui("login")
-		} else {
-			app_shell_ui(app_state)
-		}
+	  if (!app_state$logged) {
+		login_ui("login")
+	  } else {
+		app_shell_ui(app_state)
+	  }
 	})
+
 
 	# Login server
 	login_server("login", app_state)

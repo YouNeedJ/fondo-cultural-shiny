@@ -1,0 +1,165 @@
+Estoy desarrollando una aplicación Shiny profesional en R, con arquitectura modular, siguiendo buenas prácticas para que el proyecto escale.
+
+El repositorio está en GitHub (privado):
+👉 https://github.com/YouNeedJ/fondo-cultural-shiny
+
+🧱 Arquitectura del proyecto
+
+app/app.R
+Punto de entrada de la app. Maneja:
+
+
+Quiero continuar revisando el proyecto desde el estado actual del repositorio.
+Mi prioridad ahora es: ver porque me sigue saliendo bostrap 3.....
+Antes de escribir código, quiero que me expliques el plan, los archivos que se tocarán y por qué.
+carga de configuración
+
+inicialización de Mongo
+
+control de login
+
+render dinámico del shell
+
+app/ui/app_shell.R
+Es el layout principal (shell).
+No contiene lógica, solo estructura:
+
+header
+
+menú lateral
+
+área central donde se cargan módulos
+
+services/ (lógica de negocio, sin UI)
+
+mongo.R → conexión única a MongoDB
+
+auth.R → autenticación
+
+session.R / session_manager.R → manejo de sesión
+
+clientes_service.R → CRUD de clientes
+
+temas_service.R → CRUD de temas
+
+openai.R → wrapper para OpenAI (ya funcional)
+
+modules/ (cada módulo tiene UI + Server)
+
+login/
+
+clientes/
+
+temas/
+
+Cada módulo:
+
+usa su propio *_ui.R y *_server.R
+
+llama a services (no accede directo a Mongo)
+
+🔐 Login
+
+Login funcional
+
+Control de sesión
+
+Arquitectura preparada para roles
+
+👥 Módulo Clientes (YA FUNCIONAL)
+
+Crear cliente
+
+Buscar cliente existente
+
+Actualizar cliente
+
+Eliminar cliente
+
+Feedback visual (notificaciones)
+
+Limpieza correcta del formulario después de acciones
+
+Filtros + tabla + gráficas
+
+🏷️ Módulo Temas
+
+Estructura igual a Clientes
+
+CRUD completo sobre colección temas
+
+Campos:
+
+CODIGO
+
+TEMA
+
+🎨 UI
+
+Usa bslib, NO shinydashboard
+
+Menú lateral (no pestañas)
+
+Diseño limpio, profesional
+
+🗄️ MongoDB
+
+Una sola conexión centralizada
+
+No se duplican conexiones
+
+Datos sensibles fuera del repo (.env)
+
+📦 GitHub
+
+Repo limpio (sin datos ni excels)
+
+Uso correcto de commits
+
+Rama main
+
+🎯 Objetivo
+
+Continuar el desarrollo de forma ordenada y profesional, sin romper lo existente.
+Preferimos:
+
+cambios pequeños
+
+bien explicados
+
+sin soluciones improvisadas
+
+Antes de escribir código nuevo:
+
+explicar qué se va a hacer
+
+por qué
+
+dónde va
+
+Quiero que revises el repo y continuemos desde el estado actual, respetando esta arquitectura.
+
+
+
+
+https://github.com/YouNeedJ/fondo-cultural-shiny/tree/main
+https://github.com/YouNeedJ/fondo-cultural-shiny/tree/main/app
+
+
+ahora los raw de cada cosa:
+https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/app.R
+https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/config/settings.r
+https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/modules/clientes/clientes_server.R
+https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/modules/clientes/clientes_ui.R
+https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/modules/login/login_server.R
+https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/modules/login/login_ui.R
+https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/services/auth.R
+https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/services/clientes_service.R
+https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/services/mongo.R
+https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/services/openai.R
+https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/services/session.R
+https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/services/session_manager.R
+https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/services/temas_service.R
+https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/ui/app_shell.R
+https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/www/styles.css
+

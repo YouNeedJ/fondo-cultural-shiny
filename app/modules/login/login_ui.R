@@ -1,49 +1,31 @@
-# app/modules/login/login_ui.R
-# UI del módulo de login
-
 login_ui <- function(id) {
-	ns <- NS(id)
+  ns <- NS(id)
 
-	fluidPage(
-	
-		div(
-			class = "login-logo",
-			tags$img(
-				src = "logo.png",
-				alt = "Fondo Cultural",
-				height = "90px"
-			)
-		),
-		div(
-			style = "max-width:400px; margin:100px auto;",
+  tagList(
+    div(
+      class = "container min-vh-100 d-flex flex-column align-items-center justify-content-center",
 
-			h3("Bienvenido", style = "text-align:center;"),
-			br(),  
+      # logo
+      img(src = "logo.png", height = "90px", class = "mb-4"),
 
-			textInput(
-				ns("username"),
-				"Usuario",
-				width = "100%"
-			),
+      # card de login
+      div(
+        class = "card shadow-sm p-4",
+        style = "max-width: 400px; width: 100%;",
 
-			passwordInput(
-				ns("password"),
-				"Contrasena",
-				width = "100%"
-			),
+        h3("Bienvenido", class = "text-center mb-3"),
 
-			br(),
+        textInput(ns("username"), "Usuario"),
+        passwordInput(ns("password"), "Contraseña"),
 
-			actionButton(
-				ns("login_btn"),
-				"Ingresar",
-				class = "btn btn-success btn-block"
-			),
+        actionButton(
+          ns("login_btn"),
+          "Ingresar",
+          class = "btn btn-success w-100 mt-3"
+        ),
 
-			div(
-				class = "login-message",
-				textOutput(ns("login_message"))
-			)
-		)
-	)
+        div(class = "text-danger mt-2 text-center", textOutput(ns("login_message")))
+      )
+    )
+  )
 }

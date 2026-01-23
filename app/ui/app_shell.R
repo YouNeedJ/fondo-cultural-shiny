@@ -1,61 +1,25 @@
-# app/ui/app_shell.R
-# Shell principal de la aplicación (usuario logueado)
-
 app_shell_ui <- function(app_state) {
-
-  fluidPage(
-
-    # -------------------------
-    # Header
-    # -------------------------
+  tagList(
     div(
-      class = "app-header",
+      class = "bg-primary text-white p-3 d-flex justify-content-between align-items-center",
+
       div(
-        class = "app-header-left",
-        tags$img(
-          src = "logo.png",
-          height = "80px",
-          style = "margin-right:10px;"
-        )#,
-        # span(
-          # class = "app-title",
-          # "Fondo Cultural"
-        # )
+        class = "d-flex align-items-center",
+        img(src = "logo.png", height = "50px", class = "me-2"),
+        h4("Fondo Cultural", class = "mb-0")
       ),
-      div(
-        class = "app-header-right",
-        actionButton(
-          "logout",
-          "Cerrar sesión",
-          class = "btn btn-outline-light"
-        )
-      )
+
+      actionButton("logout", "Cerrar sesión", class = "btn btn-outline-light")
     ),
 
-    # -------------------------
-    # Layout principal
-    # -------------------------
-	sidebarLayout(
+    div(class = "container-fluid mt-3",
+      nav(
+        class = "nav nav-pills mb-3",
+        a(class = "nav-link", href = "#clientes", "Clientes"),
+        a(class = "nav-link", href = "#temas", "Temas")
+      ),
 
-		sidebarPanel(
-			width = 3,
-			h4("Menú"),
-
-			tags$ul(
-				class = "nav nav-pills nav-stacked",
-				tags$li(
-					class = "active",
-					tags$a("Clientes")
-				)
-			)
-		),
-
-
-		mainPanel(
-			width = 9,
-			clientes_ui("clientes")
-		)
-
-	)
+      div(id = "main_content")
+    )
   )
 }
