@@ -24,7 +24,8 @@ app_shell_ui <- function(app_state) {
 	),
 
 
-     uiOutput("main_content")
+     clientes_ui("clientes")
+
 
     )
   )
