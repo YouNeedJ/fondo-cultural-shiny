@@ -5,7 +5,8 @@
 
 library(stringi)
 
-source("services/mongo.R")
+# mongo.R ya se carga en app.R y se inicializa con init_mongo(CONFIG)
+
 
 # --------------------------------------------------
 # Utilidades internas

@@ -24,10 +24,7 @@ clientes_ui <- function(id) {
 					  ns("ciudad"),
 					  "Ciudad",
 					  choices = NULL,
-					  options = list(
-						create = TRUE,
-						placeholder = "Seleccione una ciudad"
-					  )
+					  options = list(create = TRUE, placeholder = "Seleccione o escriba una ciudad")
 					),
 
 					selectInput(
