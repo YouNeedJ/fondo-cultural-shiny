@@ -78,6 +78,9 @@ server <- function(input, output, session) {
 	# Login server
 	login_server("login", app_state)
 	
+	# Inicializar módulo clientes UNA sola vez
+	clientes_server("clientes")
+	
 	# Navegación entre módulos
 	observeEvent(input$nav_clientes, {
 	  output$main_content <- renderUI({
@@ -111,15 +114,12 @@ server <- function(input, output, session) {
 	observeEvent(app_state$logged, {
 	  if (isTRUE(app_state$logged)) {
 
-		# Render inicial por defecto
 		output$main_content <- renderUI({
 		  clientes_ui("clientes")
 		})
-
-		# Activar server del módulo
-		clientes_server("clientes")
 	  }
 	})
+
 
 
 
