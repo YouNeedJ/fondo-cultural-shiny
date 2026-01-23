@@ -18,7 +18,7 @@ clientes_server <- function(id) {
 # --------------------------------------------------
 # Cargar ciudades (formulario y filtros)
 # --------------------------------------------------
-observeEvent(TRUE, {
+session$onFlushed(function() {
 
   ciudades <- get_ciudades()
 
@@ -42,6 +42,22 @@ observeEvent(TRUE, {
 }, once = TRUE)
 
 
+
+observeEvent(input$tabs_clientes, {
+
+  if (input$tabs_clientes == "Análisis de Clientes") {
+
+    ciudades <- get_ciudades()
+
+    updateSelectizeInput(
+      session,
+      "filtro_ciudad",
+      choices = ciudades,
+      server = FALSE
+    )
+  }
+
+})
 
 
 

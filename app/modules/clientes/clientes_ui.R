@@ -1,128 +1,153 @@
 # app/modules/clientes/clientes_ui.R
 
 clientes_ui <- function(id) {
-	ns <- NS(id)
+  ns <- NS(id)
 
-	bslib::navset_tab(
+  bslib::navset_tab(
+  
+   id = ns("tabs_clientes"),
 
-		nav_panel(
-			title = "Gestión de Clientes",
+    nav_panel(
+      title = "Gestión de Clientes",
 
-			h3("Gestión de Clientes"),
-			p("Crear, consultar y actualizar información de clientes"),
+      h3("Gestión de Clientes"),
+      p("Crear, consultar y actualizar información de clientes"),
 
-			fluidRow(
-				column(
-					12,
+      fluidRow(
+		
+        
 
-					textInput(ns("id_cliente"), "Identificación",placeholder=" "),
-					textInput(ns("nombre"), "Nombre del Cliente",placeholder=" "),
-					textInput(ns("direccion"), "Dirección",placeholder=" "),
-					textInput(ns("correo"), "Correo electrónico",placeholder=" "),
+          textInput(ns("id_cliente"), "Identificación", width="100%",placeholder = " "),
+          textInput(ns("nombre"), "Nombre del Cliente", width="100%",placeholder = " "),
+          textInput(ns("direccion"), "Dirección", width="100%",placeholder = " "),
+          textInput(ns("correo"), "Correo electrónico", width="100%",placeholder = " "),
 
-					selectizeInput(
-					  ns("ciudad"),
-					  "Ciudad",
-					  choices = NULL,
-					  options = list(create = TRUE, placeholder = "Seleccione o escriba una ciudad")
-					),
+			selectizeInput(
+			  ns("ciudad"),
+			  "Ciudad",
+			  choices = get_ciudades(),
+			  options = list(
+				create = TRUE,
+				placeholder = "Seleccione una ciudad"
+			  ),
+			  width="33%"
+			),
 
-					selectInput(
-						ns("tipo_persona"),
-						"Tipo de cliente",
-						choices = c("CLIENTE", "VENDEDOR")
-					),
 
-					numericInput(
-						ns("descuento"),
-						"Descuento (%)",
-						value = 0,
-						min = 0,
-						max = 100
-					),
+          selectInput(
+            ns("tipo_persona"),
+            "Tipo de cliente",
+            choices = c("CLIENTE", "VENDEDOR"),
+			width="33%"
+          ),
 
-					br(),
+          numericInput(
+            ns("descuento"),
+            "Descuento (%)",
+            value = 0,
+            min = 0,
+            max = 100,
+			width="33%"
+          ),
 
-					actionButton(
-						ns("buscar"),
-						"Buscar",
-						icon = icon("search"),
-						class = "btn-primary"
-					),
-
-					actionButton(
-						ns("guardar"),
-						"Guardar",
-						icon = icon("save"),
-						class = "btn-success"
-					),
-					
-					actionButton(
-						ns("eliminar"),
-						"Eliminar",
-						icon = icon("trash"),
-						class = "btn-danger"
-					)
-
-				)
-			)
+          br(),
+		
+		fluidRow(
+		column(4,
+          actionButton(
+            ns("buscar"),
+            "Buscar",
+            icon = icon("search"),
+              class = "btn btn-primary",
+			width="100%"
+          )
 		),
-
-		nav_panel(
-			title = "Análisis de Clientes",
-
-			h3("Análisis de Clientes"),
-			p("Distribución y comportamiento de la base de clientes"),
-			
-			fluidRow(
-				column(6, plotlyOutput(ns("plot_ciudad"))),
-				column(6, plotlyOutput(ns("plot_tipo")))
-			),
-			
-			hr(),
-
-# --- Filtros ---
-			fluidRow(
-				column(
-					3,
-					h5("Filtros"),
-
-					selectizeInput(
-						ns("filtro_ciudad"),
-						"Ciudad",
-						choices = NULL,
-						multiple = TRUE,
-						options = list(placeholder = "Seleccione una o más ciudades")
-					),
-
-					selectInput(
-						ns("filtro_tipo"),
-						"Tipo de cliente",
-						choices = c("CLIENTE", "VENDEDOR"),
-						multiple = TRUE
-					),
-
-					actionButton(
-						ns("aplicar_filtros"),
-						"Aplicar filtros",
-						icon = icon("filter"),
-						class = "btn-primary"
-					)
-				)
-			),
-
-			br(),
-
-			# --- Tabla colapsable ---
-			bslib::accordion(
-				bslib::accordion_panel(
-					title = "Ver tabla de resultados",
-					DT::DTOutput(ns("tabla_clientes"))
-				)
-			)
-
-
-			
+		
+		column(4,
+          actionButton(
+            ns("guardar"),
+            "Guardar",
+            icon = icon("save"),
+            class = "btn btn-success me-3",
+			width="100%"
+          )
+		),
+		
+		column(4,
+          actionButton(
+            ns("eliminar"),
+            "Eliminar",
+            icon = icon("trash"),
+            class = "btn-danger me-3",
+			width="100%"
+          )
 		)
-	)
+		)
+       
+      )
+    ),
+
+    nav_panel(
+      title = "Análisis de Clientes",
+
+      h3("Análisis de Clientes"),
+      p("Distribución y comportamiento de la base de clientes"),
+
+      fluidRow(
+        column(6, plotlyOutput(ns("plot_ciudad"))),
+        column(6, plotlyOutput(ns("plot_tipo")))
+      ),
+
+      hr(),
+
+      fluidRow(
+        
+          h5("Filtros"),
+			column(6,
+			selectizeInput(
+			  ns("filtro_ciudad"),
+			  "Ciudad",
+			  choices = get_ciudades(),
+			  multiple = TRUE,
+			  options = list(
+				placeholder = "Seleccione una o más ciudades"
+			  ),
+			  width="100%"
+			)),
+		column(6,
+          selectInput(
+            ns("filtro_tipo"),
+            "Tipo de cliente",
+            choices = c("CLIENTE", "VENDEDOR"),
+            multiple = TRUE,
+			width="100%"
+          )
+		),
+	),
+	fluidRow(
+	column(4),
+	column(4,
+          actionButton(
+            ns("aplicar_filtros"),
+            "Aplicar filtros",
+            icon = icon("filter"),
+            class = "btn-primary",
+			width="100%"
+          )
+	),
+	column(4)
+
+     
+	),
+
+      br(),
+
+      bslib::accordion(
+        bslib::accordion_panel(
+          title = "Ver tabla de resultados",
+          DT::DTOutput(ns("tabla_clientes"))
+        )
+      )
+    )
+  )
 }

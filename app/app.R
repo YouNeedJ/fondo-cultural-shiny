@@ -1,5 +1,6 @@
 options(encoding = "UTF-8")
-Sys.setlocale("LC_ALL", "Spanish_Spain.1252")
+try(Sys.setlocale("LC_ALL", "es_ES.UTF-8"), silent = TRUE)
+
 
 
 # app/app.R
