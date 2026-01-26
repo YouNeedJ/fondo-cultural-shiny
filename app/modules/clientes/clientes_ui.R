@@ -10,7 +10,7 @@ clientes_ui <- function(id) {
     nav_panel(
       title = "Gestión de Clientes",
 
-      h3("Gestión de Clientes"),
+      h3("Gestión de Clientes",class = "text-center fw-bold mb-3"),
       p("Crear, consultar y actualizar información de clientes"),
 
       fluidRow(
@@ -68,7 +68,7 @@ clientes_ui <- function(id) {
             ns("guardar"),
             "Guardar",
             icon = icon("save"),
-            class = "btn btn-success me-3",
+            class = "btn btn-success",
 			width="100%"
           )
 		),
@@ -78,7 +78,7 @@ clientes_ui <- function(id) {
             ns("eliminar"),
             "Eliminar",
             icon = icon("trash"),
-            class = "btn-danger me-3",
+            class = "btn-danger",
 			width="100%"
           )
 		)
@@ -89,8 +89,9 @@ clientes_ui <- function(id) {
 
     nav_panel(
       title = "Análisis de Clientes",
-
-      h3("Análisis de Clientes"),
+		br(),
+		br(),
+     h3("Análisis de Clientes", class = "text-center fw-bold mb-4"),
       p("Distribución y comportamiento de la base de clientes"),
 
       fluidRow(
@@ -102,7 +103,8 @@ clientes_ui <- function(id) {
 
       fluidRow(
         
-          h5("Filtros"),
+         h5("Filtros",class = "text-center fw-bold mb-3"),
+
 			column(6,
 			selectizeInput(
 			  ns("filtro_ciudad"),
