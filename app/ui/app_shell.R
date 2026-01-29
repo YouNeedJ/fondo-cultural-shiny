@@ -13,21 +13,17 @@ app_shell_ui <- function(app_state) {
     ),
 
     div(class = "container-fluid mt-3",
-		tags$ul(
+	tags$ul(
 	  class = "nav nav-pills mb-3",
-	  tags$li(class = "nav-item",
-		actionLink("nav_clientes", "Clientes", class = "nav-link")
-	  ),
-	  tags$li(class = "nav-item",
-		actionLink("nav_temas", "Temas", class = "nav-link")
-	  ),
-	  tags$li(class = "nav-item",
-		actionLink("nav_inventario", "Inventario", class = "nav-link")
-	  )
+	  tags$li(class = "nav-item",actionLink("nav_clientes", "Clientes", class = "nav-link")),
+	  tags$li(class = "nav-item",actionLink("nav_temas", "Temas", class = "nav-link")),
+	  tags$li(class = "nav-item",actionLink("nav_inventario", "Inventario", class = "nav-link"))
 	),
 
+    #clientes_ui("clientes"),
+	uiOutput("main_content")
 
-     clientes_ui("clientes")
+	 
 
 
     )
