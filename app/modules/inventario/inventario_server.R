@@ -98,27 +98,7 @@ inventario_server <- function(id) {
 
 		return()
 		
-		observeEvent(input$confirmar_update, {
-
-		  removeModal()
-
-		  archivar_libro_manual(
-			isbn = trimws(input$isbn),
-			titulo = input$titulo,
-			precio = input$precio_popup,
-			cantidad_agregar = input$cant_agregar,
-			editorial = input$editorial,
-			autor = input$autor,
-			bodega = input$bodega_1_popup,
-			bodega_adicional = input$bodega_2_popup
-		  )
-
-		  showNotification("Inventario actualizado correctamente", type = "message")
-		})
-
-
-
-      showNotification(paste("OK:", res$action, "-", res$isbn), type = "message")
+		showNotification(paste("OK:", res$action, "-", res$isbn), type = "message")
     })
 
     # Confirmación libro nuevo (popup)
@@ -138,6 +118,24 @@ inventario_server <- function(id) {
 
       showNotification(paste("Creado:", res$isbn), type = "message")
     })
+	
+	observeEvent(input$confirmar_update, {
+
+	  removeModal()
+
+	  archivar_libro_manual(
+		isbn = trimws(input$isbn),
+		titulo = input$titulo,
+		precio = input$precio_popup,
+		cantidad_agregar = input$cant_agregar,
+		editorial = input$editorial,
+		autor = input$autor,
+		bodega = input$bodega_1_popup,
+		bodega_adicional = input$bodega_2_popup
+	  )
+
+	  showNotification("Inventario actualizado correctamente", type = "message")
+	})
 	
 	observeEvent(input$isbn, {
 

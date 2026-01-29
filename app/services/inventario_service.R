@@ -16,12 +16,15 @@
 get_bodegas <- function() {
   bodegas <- .get_bodegas_collection()
 
-  # AJUSTAREMOS EL CAMPO cuando me confirmes cómo se llama (ej. NOMBRE)
-  # Por ahora intentamos "BODEGA" como estándar:
-  res <- bodegas$find(fields = '{"BODEGA": 1, "_id": 0}')
+  res <- bodegas$find(fields = '{"Bodega": 1, "_id": 0}')
 
   if (nrow(res) == 0) return(character(0))
-  unique(na.omit(res$BODEGA))
+
+  x <- res$Bodega
+  x <- x[!is.na(x)]
+  x <- trimws(x)
+  x <- x[x != ""]
+  sort(unique(x))
 }
 
 # Buscar un libro por ISBN
