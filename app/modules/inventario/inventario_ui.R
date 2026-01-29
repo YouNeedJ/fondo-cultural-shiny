@@ -20,21 +20,20 @@ inventario_ui <- function(id) {
       ),
 
       fluidRow(
-        column(6, textInput(ns("isbn"), "ISBN", placeholder = "978...")),
-        column(6, textInput(ns("titulo"), "Título", placeholder = "Nombre del libro"))
+        column(4,textInput(ns("isbn"), "ISBN", placeholder = "978...",width="100%")),
+		column(4,textInput(ns("titulo"), "Título", placeholder = "Nombre del libro",width="100%")),
+		column(4,numericInput(ns("cant_agregar"), "Cantidad de libros a agregar", value = 1, min = 1,width="100%")),
+		column(4,numericInput(ns("precio"), "Precio", value = 0, min = 0,width="100%")),
+        column(4,textInput(ns("editorial"), "Editorial", placeholder = "Editorial",width="100%")),
+		column(4,textInput(ns("autor"), "Autor", placeholder = "Autor",width="100%"))
       ),
 
-      fluidRow(
-        column(4, numericInput(ns("precio"), "Precio", value = 0, min = 0)),
-        column(4, numericInput(ns("cant_agregar"), "Cantidad de libros a agregar", value = 1, min = 1)),
-        column(4, textInput(ns("editorial"), "Editorial", placeholder = "Editorial"))
-      ),
-
-      fluidRow(
-        column(6, textInput(ns("autor"), "Autor", placeholder = "Autor")),
-        column(6, div(class="pt-4",
+     fluidRow(
+        column(4, ),
+        column(4, div(class="pt-4",
           actionButton(ns("guardar"), "Guardar / Sumar", class = "btn btn-success w-100")
-        ))
+        )),
+		column(4, ),
       ),
 
       hr(),

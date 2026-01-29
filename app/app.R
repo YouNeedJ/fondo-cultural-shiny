@@ -100,6 +100,13 @@ server <- function(input, output, session) {
 		div("Módulo Temas (pendiente)")
 	  })
 	})
+	
+	observeEvent(input$nav_inventario, {
+	  output$main_content <- renderUI({
+		inventario_ui("inventario")
+	  })
+	})
+
 
 
 	# Logout
