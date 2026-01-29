@@ -123,8 +123,15 @@ archivar_libro_manual <- function(isbn, titulo, precio, cantidad_agregar, editor
   imperfecto_mostrario <- as.numeric(actual[["LIBRO IMPERFECTO MOSTRARIO"]]); if (is.na(imperfecto_mostrario)) imperfecto_mostrario <- 0
   libro_en_cliente <- as.numeric(actual[["LIBRO EN CLIENTE"]]); if (is.na(libro_en_cliente)) libro_en_cliente <- 0
 
-  total_libros <- cant_nueva + mostrario + imperfecto + imperfecto_mostrario + libro_en_cliente
-  total_disponible <- cant_nueva + mostrario - imperfecto - imperfecto_mostrario
+	total_libros_actual <- as.numeric(actual[["TOTAL LIBROS"]])
+	if (is.na(total_libros_actual)) total_libros_actual <- 0
+
+	total_disponible_actual <- as.numeric(actual[["TOTAL DISPONIBLE"]])
+	if (is.na(total_disponible_actual)) total_disponible_actual <- 0
+
+	total_libros <- total_libros_actual + cantidad_agregar
+	total_disponible <- total_disponible_actual + cantidad_agregar
+
 
   derivados <- .recalcular_campos(actual[["PRECIO"]], total_libros, libro_en_cliente, total_disponible)
 
@@ -134,7 +141,7 @@ archivar_libro_manual <- function(isbn, titulo, precio, cantidad_agregar, editor
 	  "EDITORIAL" = ifelse(length(editorial) == 0, "", editorial),
 	  "AUTOR" = ifelse(length(autor) == 0, "", autor),
 	  "BODEGA" = ifelse(length(bodega) == 0, "", bodega),
-	  "BODEGA_ADICIONAL" = ifelse(
+	  "BODEGA ADICIONAL" = ifelse(
 		is.null(bodega_adicional) ||
 		length(bodega_adicional) == 0 ||
 		trimws(bodega_adicional) == "",
