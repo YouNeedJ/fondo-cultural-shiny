@@ -20,6 +20,7 @@ source("services/openai.R")
 source("services/session.R")
 source("services/auth.R")
 source("services/session_manager.R")
+source("services/inventario_service.R")
 
 
 # --------------------------------------------------
@@ -31,6 +32,11 @@ source("ui/app_shell.R")
 
 source("modules/clientes/clientes_ui.R")
 source("modules/clientes/clientes_server.R")
+
+source("modules/inventario/inventario_ui.R")
+source("modules/inventario/inventario_server.R")
+
+
 
 # Inicializar servicios
 init_mongo(CONFIG)
@@ -118,8 +124,12 @@ server <- function(input, output, session) {
 		output$main_content <- renderUI({
 		  clientes_ui("clientes")
 		})
+
+		clientes_server("clientes")
+		inventario_server("inventario")
 	  }
 	})
+
 
 
 

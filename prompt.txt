@@ -32,17 +32,17 @@ menú lateral
 
 services/ (lógica de negocio, sin UI)
 
-mongo.R → conexión única a MongoDB
+mongo.R �?conexión única a MongoDB
 
-auth.R → autenticación
+auth.R �?autenticación
 
-session.R / session_manager.R → manejo de sesión
+session.R / session_manager.R �?manejo de sesión
 
-clientes_service.R → CRUD de clientes
+clientes_service.R �?CRUD de clientes
 
-temas_service.R → CRUD de temas
+temas_service.R �?CRUD de temas
 
-openai.R → wrapper para OpenAI (ya funcional)
+openai.R �?wrapper para OpenAI (ya funcional)
 
 modules/ (cada módulo tiene UI + Server)
 
@@ -82,7 +82,7 @@ Limpieza correcta del formulario después de acciones
 
 Filtros + tabla + gráficas
 
-🏷️ Módulo Temas
+🏷�?Módulo Temas
 
 Estructura igual a Clientes
 
@@ -102,7 +102,7 @@ Menú lateral (no pestañas)
 
 Diseño limpio, profesional
 
-🗄️ MongoDB
+🗄�?MongoDB
 
 Una sola conexión centralizada
 
@@ -150,11 +150,13 @@ ahora los raw de cada cosa:
 https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/app.R
 https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/config/settings.r
 https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/modules/clientes/clientes_server.R
+
 https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/modules/clientes/clientes_ui.R
 https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/modules/login/login_server.R
 https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/modules/login/login_ui.R
 https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/services/auth.R
 https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/services/clientes_service.R
+
 https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/services/mongo.R
 https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/services/openai.R
 https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/app/services/session.R
@@ -166,44 +168,44 @@ https://raw.githubusercontent.com/YouNeedJ/fondo-cultural-shiny/refs/heads/main/
 
 
 fondo-cultural-shiny/
-│
+�?
 ├── app/                         # App Shiny (todo vive aquí)
-│   │
-│   ├── app.R                    # Punto de entrada
-│   │
-│   ├── config/                  # Configuración
-│   │   └── settings.R           # Lee .env, define CONFIG
-│   │
-│   ├── ui/                      # UI de alto nivel
-│   │   └── app_shell.R          # Layout principal (header + menú + body)
-│   │
-│   ├── modules/                 # Módulos funcionales
-│   │   │
-│   │   ├── login/
-│   │   │   ├── login_ui.R
-│   │   │   └── login_server.R
-│   │   │
-│   │   ├── clientes/
-│   │   │   ├── clientes_ui.R
-│   │   │   └── clientes_server.R
-│   │   │
-│   │   ├── temas/
-│   │   │   ├── temas_ui.R
-│   │   │   └── temas_server.R
-│   │
-│   ├── services/                # Lógica de negocio (sin UI)
-│   │   ├── mongo.R              # Conexión única a MongoDB
-│   │   ├── auth.R               # Autenticación
-│   │   ├── session.R            # Sesión (creación / validación)
-│   │   ├── session_manager.R    # Heartbeat / expiración
-│   │   ├── clientes_service.R   # CRUD clientes
-│   │   ├── temas_service.R      # CRUD temas
-│   │   └── openai.R             # Wrapper OpenAI
-│   │
-│   ├── www/                     # Assets estáticos
-│   │   ├── styles.css           # CSS propio (Bootstrap 5 friendly)
-│   │   └── logo.png
-│
+�?  �?
+�?  ├── app.R                    # Punto de entrada
+�?  �?
+�?  ├── config/                  # Configuración
+�?  �?  └── settings.R           # Lee .env, define CONFIG
+�?  �?
+�?  ├── ui/                      # UI de alto nivel
+�?  �?  └── app_shell.R          # Layout principal (header + menú + body)
+�?  �?
+�?  ├── modules/                 # Módulos funcionales
+�?  �?  �?
+�?  �?  ├── login/
+�?  �?  �?  ├── login_ui.R
+�?  �?  �?  └── login_server.R
+�?  �?  �?
+�?  �?  ├── clientes/
+�?  �?  �?  ├── clientes_ui.R
+�?  �?  �?  └── clientes_server.R
+�?  �?  �?
+�?  �?  ├── temas/
+�?  �?  �?  ├── temas_ui.R
+�?  �?  �?  └── temas_server.R
+�?  �?
+�?  ├── services/                # Lógica de negocio (sin UI)
+�?  �?  ├── mongo.R              # Conexión única a MongoDB
+�?  �?  ├── auth.R               # Autenticación
+�?  �?  ├── session.R            # Sesión (creación / validación)
+�?  �?  ├── session_manager.R    # Heartbeat / expiración
+�?  �?  ├── clientes_service.R   # CRUD clientes
+�?  �?  ├── temas_service.R      # CRUD temas
+�?  �?  └── openai.R             # Wrapper OpenAI
+�?  �?
+�?  ├── www/                     # Assets estáticos
+�?  �?  ├── styles.css           # CSS propio (Bootstrap 5 friendly)
+�?  �?  └── logo.png
+�?
 ├── .env                         # Variables de entorno (NO se sube)
 ├── .gitignore
 ├── README.md

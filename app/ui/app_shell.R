@@ -20,6 +20,9 @@ app_shell_ui <- function(app_state) {
 	  ),
 	  tags$li(class = "nav-item",
 		actionLink("nav_temas", "Temas", class = "nav-link")
+	  ),
+	  tags$li(class = "nav-item",
+		actionLink("nav_inventario", "Inventario", class = "nav-link")
 	  )
 	),
 
