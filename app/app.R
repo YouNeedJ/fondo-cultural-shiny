@@ -124,12 +124,8 @@ server <- function(input, output, session) {
 		output$main_content <- renderUI({
 		  clientes_ui("clientes")
 		})
-
-		clientes_server("clientes")
-		inventario_server("inventario")
 	  }
 	})
-
 
 
 
