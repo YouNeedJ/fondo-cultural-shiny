@@ -141,7 +141,7 @@ inventario_server <- function(id) {
 	  archivar_libro_manual(
 		isbn = isbn,
 		titulo = input$titulo,
-		precio = input$precio_popup,
+		precio = input$precio,
 		cantidad_agregar = input$cant_agregar,
 		editorial = input$editorial,
 		autor = input$autor,
