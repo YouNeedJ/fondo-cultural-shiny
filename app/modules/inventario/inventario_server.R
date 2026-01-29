@@ -73,14 +73,7 @@ inventario_server <- function(id) {
 			p(paste("Cambio solicitado:", input$cant_agregar)),
 			p(paste("Cantidad final:", cant_nueva)),
 
-			numericInput(
-			  session$ns("precio_popup"),
-			  "Precio actual",
-			  value = actual$PRECIO,
-			  min = 0
-			),
-
-			
+					
 			selectInput(session$ns("bodega_1_popup"),"Bodega principal",choices = bodegas,selected = actual$BODEGA),
 
 			selectInput(session$ns("bodega_2_popup"),"Bodega adicional",choices = c("", bodegas),selected = actual[["BODEGA ADICIONAL"]]),
@@ -117,14 +110,36 @@ inventario_server <- function(id) {
       )
 
       showNotification(paste("Creado:", res$isbn), type = "message")
+	  
+	  # Limpiar formulario
+		updateTextInput(session, "isbn", value = "")
+		updateTextInput(session, "titulo", value = "")
+		updateNumericInput(session, "precio", value = 0)
+		updateNumericInput(session, "cant_agregar", value = 1)
+		updateTextInput(session, "editorial", value = "")
+		updateTextInput(session, "autor", value = "")
+
     })
 	
 	observeEvent(input$confirmar_update, {
 
 	  removeModal()
 
+	  isbn <- trimws(input$isbn)
+
+	  # Reconsultar para mensaje claro
+	  libro <- get_libro_por_isbn(isbn)
+	  cant_actual <- as.numeric(libro[["CANTIDAD BODEGA"]])
+	  if (is.na(cant_actual)) cant_actual <- 0
+
+	  cambio <- as.numeric(input$cant_agregar)
+	  if (is.na(cambio)) cambio <- 0
+
+	  cant_final <- cant_actual + cambio
+
+	  # Guardar
 	  archivar_libro_manual(
-		isbn = trimws(input$isbn),
+		isbn = isbn,
 		titulo = input$titulo,
 		precio = input$precio_popup,
 		cantidad_agregar = input$cant_agregar,
@@ -134,8 +149,28 @@ inventario_server <- function(id) {
 		bodega_adicional = input$bodega_2_popup
 	  )
 
-	  showNotification("Inventario actualizado correctamente", type = "message")
+	  # Mensaje
+	  if (cambio < 0) {
+		showNotification(
+		  paste0("Se retiraron ", abs(cambio), " libros. Tenías ", cant_actual, " y quedaron ", cant_final, "."),
+		  type = "message"
+		)
+	  } else {
+		showNotification(
+		  paste0("Se agregaron ", cambio, " libros. Tenías ", cant_actual, " y quedaron ", cant_final, "."),
+		  type = "message"
+		)
+	  }
+
+	  # Limpiar formulario
+	  updateTextInput(session, "isbn", value = "")
+	  updateTextInput(session, "titulo", value = "")
+	  updateNumericInput(session, "precio", value = 0)
+	  updateNumericInput(session, "cant_agregar", value = 1)
+	  updateTextInput(session, "editorial", value = "")
+	  updateTextInput(session, "autor", value = "")
 	})
+
 	
 	observeEvent(input$isbn, {
 

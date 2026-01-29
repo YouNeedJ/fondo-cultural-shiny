@@ -59,7 +59,8 @@ archivar_libro_manual <- function(isbn, titulo, precio, cantidad_agregar, editor
   if (is.null(titulo) || trimws(titulo) == "") stop("TITULO es obligatorio")
 
   cantidad_agregar <- as.numeric(cantidad_agregar)
-  if (is.na(cantidad_agregar) || cantidad_agregar <= 0) stop("Cantidad a agregar debe ser > 0")
+  #if (is.na(cantidad_agregar) || cantidad_agregar <= 0) stop("Cantidad a agregar debe ser > 0")
+  if(is.na(cantidad_agregar)) {stop("Cantidad inválida")}
 
   inv <- .get_inventario_collection()
   existente <- inv$find(query = jsonlite::toJSON(list(ISBN = isbn), auto_unbox = TRUE), limit = 1)
@@ -78,22 +79,29 @@ archivar_libro_manual <- function(isbn, titulo, precio, cantidad_agregar, editor
 
     derivados <- .recalcular_campos(precio, total_libros, libro_en_cliente, total_disponible)
 
-    doc <- list(
-      "ISBN" = isbn,
-      "TITULO" = titulo,
-      "PRECIO" = as.numeric(precio),
-      "BODEGA" = bodega,
-      "BODEGA ADICIONAL" = if (!is.null(bodega_adicional) && trimws(bodega_adicional) != "") bodega_adicional else "",
-      "MOSTRARIO" = mostrario,
-      "LIBRO IMPERFECTO" = imperfecto,
-      "LIBRO IMPERFECTO MOSTRARIO" = imperfecto_mostrario,
-      "CANTIDAD BODEGA" = cant_bodega,
-      "TOTAL LIBROS" = total_libros,
-      "LIBRO EN CLIENTE" = libro_en_cliente,
-      "TOTAL DISPONIBLE" = total_disponible,
-      "EDITORIAL" = editorial,
-      "AUTOR" = autor
-    )
+    
+	
+	precio_num <- suppressWarnings(as.numeric(precio))
+	if (is.na(precio_num)) {
+	  precio_num <- as.numeric(actual[["PRECIO"]])
+	}
+	doc <- list(
+	  "ISBN" = isbn,
+	  "TITULO" = titulo,
+	  "PRECIO" = precio_num,
+	  "BODEGA" = bodega,
+	  "BODEGA ADICIONAL" = if (!is.null(bodega_adicional) && trimws(bodega_adicional) != "") bodega_adicional else "",
+	  "MOSTRARIO" = mostrario,
+	  "LIBRO IMPERFECTO" = imperfecto,
+	  "LIBRO IMPERFECTO MOSTRARIO" = imperfecto_mostrario,
+	  "CANTIDAD BODEGA" = cant_bodega,
+	  "TOTAL LIBROS" = total_libros,
+	  "LIBRO EN CLIENTE" = libro_en_cliente,
+	  "TOTAL DISPONIBLE" = total_disponible,
+	  "EDITORIAL" = editorial,
+	  "AUTOR" = autor
+	)
+
 
     doc <- c(doc, derivados)
 
@@ -120,18 +128,42 @@ archivar_libro_manual <- function(isbn, titulo, precio, cantidad_agregar, editor
 
   derivados <- .recalcular_campos(actual[["PRECIO"]], total_libros, libro_en_cliente, total_disponible)
 
-  update_set <- list(
-    "CANTIDAD BODEGA" = cant_nueva,
-    "TOTAL LIBROS" = total_libros,
-    "TOTAL DISPONIBLE" = total_disponible
-  )
+	update_set <- data.frame(
+	  "TITULO" = ifelse(length(titulo) == 0, "", titulo),
+	  "PRECIO" = as.numeric(precio)[1],
+	  "EDITORIAL" = ifelse(length(editorial) == 0, "", editorial),
+	  "AUTOR" = ifelse(length(autor) == 0, "", autor),
+	  "BODEGA" = ifelse(length(bodega) == 0, "", bodega),
+	  "BODEGA_ADICIONAL" = ifelse(
+		is.null(bodega_adicional) ||
+		length(bodega_adicional) == 0 ||
+		trimws(bodega_adicional) == "",
+		"",
+		bodega_adicional
+	  ),
+	  "CANTIDAD BODEGA" = cant_nueva,
+	  "TOTAL LIBROS" = total_libros,
+	  "TOTAL DISPONIBLE" = total_disponible,
+	  stringsAsFactors = FALSE
+	)
+
+
+
   update_set <- c(update_set, derivados)
 
-  inv$update(
-    query  = jsonlite::toJSON(list(ISBN = isbn), auto_unbox = TRUE),
-    update = jsonlite::toJSON(list("$set" = update_set), auto_unbox = TRUE),
-    upsert = FALSE
-  )
+	inv$update(
+	  query  = jsonlite::toJSON(list(ISBN = isbn), auto_unbox = TRUE),
+	  update = jsonlite::toJSON(
+		list("$set" = if (is.data.frame(update_set))
+		  as.list(update_set[1, ])
+		else
+		  update_set
+		),
+		auto_unbox = TRUE
+	  ),
+	  upsert = FALSE
+	)
+
 
   return(list(action = "sum_bodega", isbn = isbn))
 }
