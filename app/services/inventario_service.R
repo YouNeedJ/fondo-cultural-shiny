@@ -54,6 +54,9 @@ get_libro_por_isbn <- function(isbn) {
 # - Si no existe: inserta nuevo con MOSTRARIO/IMPERFECTOS = 0
 archivar_libro_manual <- function(isbn, titulo, precio, cantidad_agregar, editorial, autor,
                                   bodega, bodega_adicional = NULL) {
+								  
+	isbn <- normalizar_isbn(isbn)
+
 
   if (is.null(isbn) || trimws(isbn) == "") stop("ISBN es obligatorio")
   if (is.null(titulo) || trimws(titulo) == "") stop("TITULO es obligatorio")
@@ -189,3 +192,10 @@ eliminar_libro_por_isbn <- function(isbn) {
 
   TRUE
 }
+
+	normalizar_isbn <- function(x) {
+	  x <- trimws(as.character(x))
+	  x <- toupper(x)
+	  # deja solo dígitos y X
+	  gsub("[^0-9X]", "", x)
+	}
