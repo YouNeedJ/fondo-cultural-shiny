@@ -290,6 +290,10 @@ inventario_server <- function(id) {
 	respuesta_limpia <- trimws(respuesta_limpia)
 
 	libros <- jsonlite::fromJSON(respuesta_limpia)
+	libros$cantidad <- suppressWarnings(as.numeric(libros$cantidad))
+	libros$cantidad[is.na(libros$cantidad)] <- 1
+		
+	libros$isbn <- sapply(libros$isbn, normalizar_isbn)
 	libros_pdf(libros)
 	
 	if (nrow(libros) > 0) {
@@ -298,48 +302,51 @@ inventario_server <- function(id) {
 
   bodegas <- get_bodegas()
 
-  showModal(
-    modalDialog(
-      title = "Libro detectado (PDF)",
+  libro <- libros[1, ]
 
-      textInput(ns("pdf_isbn"), "ISBN", value = libro$isbn),
-      textInput(ns("pdf_titulo"), "Título", value = libro$titulo),
-      textInput(ns("pdf_autor"), "Autor", value = libro$autor),
+showModal(
+  modalDialog(
+    title = "Libro detectado (PDF)",
 
-      numericInput(
-        ns("pdf_cantidad"),
-        "Cantidad a agregar",
-        value = libro$cantidad,
-        min = -10000
-      ),
+    textInput(ns("pdf_isbn"), "ISBN", value = libro$isbn),
+    textInput(ns("pdf_titulo"), "Título", value = libro$titulo),
+    textInput(ns("pdf_autor"), "Autor", value = libro$autor),
 
-      numericInput(ns("pdf_precio"), "Precio", value = 0),
+    numericInput(
+      ns("pdf_cantidad"),
+      "Cantidad a agregar",
+      value = libro$cantidad,
+      min = 0
+    ),
 
-      textInput(ns("pdf_editorial"), "Editorial", value = ""),
+    numericInput(ns("pdf_precio"), "Precio", value = 0),
 
-      selectInput(
-        ns("pdf_bodega1"),
-        "Bodega principal",
-        choices = bodegas
-      ),
+    textInput(ns("pdf_editorial"), "Editorial", value = ""),
 
-      selectInput(
-        ns("pdf_bodega2"),
-        "Bodega adicional",
-        choices = c("", bodegas)
-      ),
+    selectInput(
+      ns("pdf_bodega1"),
+      "Bodega principal",
+      choices = get_bodegas()
+    ),
 
-      footer = tagList(
-        modalButton("Cancelar"),
-        actionButton(ns("confirmar_pdf_libro"),
-                     "Guardar libro",
-                     class = "btn btn-success")
-      ),
+    selectInput(
+      ns("pdf_bodega2"),
+      "Bodega adicional",
+      choices = c("", get_bodegas())
+    ),
 
-      size = "l",
-      easyClose = FALSE
-    )
+    footer = tagList(
+      modalButton("Cancelar"),
+      actionButton(ns("confirmar_pdf_libro"),
+                   "Guardar libro",
+                   class = "btn btn-success")
+    ),
+
+    size = "l",
+    easyClose = FALSE
   )
+)
+
 }
 
 
@@ -364,6 +371,26 @@ libros <- libros[!duplicated(libros$isbn), ]
 
 	})
 
+observeEvent(input$confirmar_pdf_libro, {
+
+  removeModal()
+
+  archivar_libro_manual(
+    isbn = input$pdf_isbn,
+    titulo = input$pdf_titulo,
+    precio = input$pdf_precio,
+    cantidad_agregar = input$pdf_cantidad,
+    editorial = input$pdf_editorial,
+    autor = input$pdf_autor,
+    bodega = input$pdf_bodega1,
+    bodega_adicional = input$pdf_bodega2
+  )
+
+  showNotification(
+    paste("Libro procesado:", input$pdf_isbn),
+    type = "message"
+  )
+})
 
 
 
