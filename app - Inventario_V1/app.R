@@ -1,0 +1,145 @@
+options(encoding = "UTF-8")
+try(Sys.setlocale("LC_ALL", "es_ES.UTF-8"), silent = TRUE)
+
+
+
+# app/app.R
+library(shiny)
+library(bslib)
+
+# --------------------------------------------------
+# 1. Cargar configuración
+# --------------------------------------------------
+source("config/settings.R")
+
+# --------------------------------------------------
+# 2. Cargar services
+# --------------------------------------------------
+source("services/mongo.R")
+source("services/openai.R")
+source("services/session.R")
+source("services/auth.R")
+source("services/session_manager.R")
+source("services/inventario_service.R")
+
+
+# --------------------------------------------------
+# 3. Cargar módulos
+# --------------------------------------------------
+source("modules/login/login_ui.R")
+source("modules/login/login_server.R")
+source("ui/app_shell.R")
+
+source("modules/clientes/clientes_ui.R")
+source("modules/clientes/clientes_server.R")
+
+source("modules/inventario/inventario_ui.R")
+source("modules/inventario/inventario_server.R")
+
+
+
+# Inicializar servicios
+init_mongo(CONFIG)
+init_openai(CONFIG)
+
+# --------------------------------------------------
+# 4. UI base
+# --------------------------------------------------
+ui <- fluidPage(
+  theme = bs_theme(
+    version = 5,
+    bootswatch = "flatly",  # <- tema Bootstrap 5 bonito
+    base_font = font_google("Inter")
+  ),
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "styles.css")
+  ),
+  uiOutput("app_ui")
+)
+
+
+
+# --------------------------------------------------
+# 5. Server
+# --------------------------------------------------
+server <- function(input, output, session) {
+
+	app_state <- reactiveValues(
+		logged = FALSE,
+		user = NULL,
+		session_id = NULL,
+		rol = NULL
+	)
+	
+	
+	
+	output$app_ui <- renderUI({
+	  if (!app_state$logged) {
+		login_ui("login")
+	  } else {
+		app_shell_ui(app_state)
+	  }
+	})
+
+
+	# Login server
+	login_server("login", app_state)
+	
+	# Inicializar módulo clientes UNA sola vez
+	clientes_server("clientes")
+	
+	# Navegación entre módulos
+	observeEvent(input$nav_clientes, {
+	  output$main_content <- renderUI({
+		clientes_ui("clientes")
+	  })
+	})
+
+	observeEvent(input$nav_temas, {
+	  output$main_content <- renderUI({
+		div("Módulo Temas (pendiente)")
+	  })
+	})
+	
+	observeEvent(input$nav_inventario, {
+	  output$main_content <- renderUI({
+		inventario_ui("inventario")
+	  })
+	})
+
+
+
+	# Logout
+	observeEvent(input$logout, {
+
+		if (!is.null(app_state$user)) {
+			logout_user(app_state$user)
+		}
+
+		app_state$logged     <- FALSE
+		app_state$user       <- NULL
+		app_state$rol        <- NULL
+		app_state$session_id <- NULL
+	})
+	
+	# --------------------------------------------------
+	# Activar módulos cuando el usuario está logueado
+	# --------------------------------------------------
+observeEvent(app_state$logged, {
+  if (isTRUE(app_state$logged)) {
+
+    output$main_content <- renderUI({
+      clientes_ui("clientes")
+    })
+
+    clientes_server("clientes")
+    inventario_server("inventario")
+  }
+})
+
+
+
+
+}
+
+shinyApp(ui, server)

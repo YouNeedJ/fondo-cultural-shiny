@@ -1,19 +1,9 @@
 # app/modules/inventario/inventario_server.R
-library(pdftools)
-
 
 inventario_server <- function(id) {
   moduleServer(id, function(input, output, session) {
 	ns <- session$ns
-	
-	 libros_pdf <- reactiveVal(NULL)
 
-	normalizar_isbn <- function(x) {
-	  x <- trimws(as.character(x))
-	  x <- toupper(x)
-	  # deja solo dígitos y X
-	  gsub("[^0-9X]", "", x)
-	}
 
     observeEvent(input$guardar, {
 
@@ -238,133 +228,6 @@ inventario_server <- function(id) {
 	  showNotification("Libro eliminado", type="message")
 
 	})
-	
-	observeEvent(input$procesar_pdf, {
-
-	  req(input$pdf_file)
-	  
-	showModal(modalDialog(
-  title = "Procesando PDF",
-  tagList(
-    p("Leyendo archivo PDF..."),
-    p("Consultando IA para extraer libros..."),
-    br(),
-    strong("Esto puede tardar algunos segundos.")
-  ),
-  footer = NULL,
-  easyClose = FALSE
-))
-
-
-	  texto <- pdftools::pdf_text(input$pdf_file$datapath)
-	  texto <- paste(texto, collapse = "\n")
-
-	  # limpiamos líneas vacías
-	  lineas <- strsplit(texto, "\n")[[1]]
-	  lineas <- trimws(lineas)
-	  lineas <- lineas[lineas != ""]
-	  texto <- paste(lineas, collapse = "\n")
-
-	  prompt <- paste0(
-		"Extrae libros del texto.\n",
-		"Devuelve SOLO JSON.\n",
-		"Formato:\n",
-		"[{\"isbn\":\"\",\"titulo\":\"\",\"autor\":\"\",\"cantidad\":0}]\n\n",
-		"Texto:\n",
-		texto
-	  )
-
-	  respuesta <- openai_text(prompt, temperature = 0)
-	  
-	  removeModal()  # <- cerrar modal de espera
-
-  showModal(modalDialog(
-    title = "Respuesta IA",
-    tags$textarea(style="width:100%;height:400px;", respuesta),
-    easyClose = TRUE,
-    footer = modalButton("Cerrar")
-  ))
-	  
-	  # quitar bloque ```json si viene
-	respuesta_limpia <- gsub("```json|```", "", respuesta)
-	respuesta_limpia <- trimws(respuesta_limpia)
-
-	libros <- jsonlite::fromJSON(respuesta_limpia)
-	libros_pdf(libros)
-	
-	if (nrow(libros) > 0) {
-
-  libro <- libros[1, ]
-
-  bodegas <- get_bodegas()
-
-  showModal(
-    modalDialog(
-      title = "Libro detectado (PDF)",
-
-      textInput(ns("pdf_isbn"), "ISBN", value = libro$isbn),
-      textInput(ns("pdf_titulo"), "Título", value = libro$titulo),
-      textInput(ns("pdf_autor"), "Autor", value = libro$autor),
-
-      numericInput(
-        ns("pdf_cantidad"),
-        "Cantidad a agregar",
-        value = libro$cantidad,
-        min = -10000
-      ),
-
-      numericInput(ns("pdf_precio"), "Precio", value = 0),
-
-      textInput(ns("pdf_editorial"), "Editorial", value = ""),
-
-      selectInput(
-        ns("pdf_bodega1"),
-        "Bodega principal",
-        choices = bodegas
-      ),
-
-      selectInput(
-        ns("pdf_bodega2"),
-        "Bodega adicional",
-        choices = c("", bodegas)
-      ),
-
-      footer = tagList(
-        modalButton("Cancelar"),
-        actionButton(ns("confirmar_pdf_libro"),
-                     "Guardar libro",
-                     class = "btn btn-success")
-      ),
-
-      size = "l",
-      easyClose = FALSE
-    )
-  )
-}
-
-
-	
-	# limpiar ISBN
-libros$isbn <- gsub("[^0-9Xx-]", "", libros$isbn)
-
-# quitar vacíos
-libros <- libros[libros$isbn != "", ]
-
-# quitar duplicados por ISBN
-libros <- libros[!duplicated(libros$isbn), ]
-
-
-	  showModal(modalDialog(
-  title = "Respuesta IA",
-  paste("Libros detectados:", nrow(libros)),
-  easyClose = TRUE,
-  footer = modalButton("Cerrar")
-))
-
-
-	})
-
-
 
 
   })

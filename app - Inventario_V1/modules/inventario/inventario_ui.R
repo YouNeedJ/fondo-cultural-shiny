@@ -47,28 +47,12 @@ inventario_ui <- function(id) {
     ),
 
     nav_panel(
-	  title = "Cargar desde PDF (IA)",
-
-	  div(class="text-center my-4",
-		  h4("Cargar desde PDF (IA)", class="fw-bold"),
-		  p("Suba factura o lista de libros en PDF", class="text-muted")
-	  ),
-
-	  fluidRow(
-		column(4),
-		column(4,
-		  fileInput(ns("pdf_file"),
-					"Seleccione PDF",
-					accept = ".pdf",
-					width = "100%"),
-		  br(),
-		  actionButton(ns("procesar_pdf"),
-					   "Leer PDF",
-					   class = "btn btn-primary w-100")
-		),
-		column(4)
-	  )
-	),
+      title = "Cargar desde PDF (IA)",
+      div(class="text-center my-4",
+          h4("Cargar desde PDF (IA)", class="fw-bold"),
+          p("Pendiente: extracción de texto + OpenAI + confirmaciones de precio/bodega", class="text-muted")
+      )
+    ),
 
     nav_panel(
       title = "Estadísticas",
