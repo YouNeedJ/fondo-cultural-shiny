@@ -46,15 +46,15 @@ init_openai(CONFIG)
 # 4. UI base
 # --------------------------------------------------
 ui <- fluidPage(
-  theme = bs_theme(
-    version = 5,
-    bootswatch = "flatly",  # <- tema Bootstrap 5 bonito
-    base_font = font_google("Inter")
-  ),
-  tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "styles.css")
-  ),
-  uiOutput("app_ui")
+	theme = bs_theme(
+	version = 5,
+		bootswatch = "flatly",  # <- tema Bootstrap 5 bonito
+		base_font = font_google("Inter")
+	),
+	tags$head(
+		tags$link(rel = "stylesheet", type = "text/css", href = "styles.css")
+	),
+	uiOutput("app_ui")
 )
 
 
@@ -70,41 +70,41 @@ server <- function(input, output, session) {
 		session_id = NULL,
 		rol = NULL
 	)
-	
-	
-	
+
+
+
 	output$app_ui <- renderUI({
-	  if (!app_state$logged) {
-		login_ui("login")
-	  } else {
-		app_shell_ui(app_state)
-	  }
+		if (!app_state$logged) {
+			login_ui("login")
+		} else {
+			app_shell_ui(app_state)
+		}
 	})
 
 
 	# Login server
 	login_server("login", app_state)
-	
+
 	# Inicializar módulo clientes UNA sola vez
 	clientes_server("clientes")
-	
+
 	# Navegación entre módulos
 	observeEvent(input$nav_clientes, {
-	  output$main_content <- renderUI({
-		clientes_ui("clientes")
-	  })
+		output$main_content <- renderUI({
+			clientes_ui("clientes")
+		})
 	})
 
 	observeEvent(input$nav_temas, {
-	  output$main_content <- renderUI({
-		div("Módulo Temas (pendiente)")
-	  })
+		output$main_content <- renderUI({
+			div("Módulo Temas (pendiente)")
+		})
 	})
-	
+
 	observeEvent(input$nav_inventario, {
-	  output$main_content <- renderUI({
-		inventario_ui("inventario")
-	  })
+		output$main_content <- renderUI({
+			inventario_ui("inventario")
+		})
 	})
 
 
@@ -121,22 +121,22 @@ server <- function(input, output, session) {
 		app_state$rol        <- NULL
 		app_state$session_id <- NULL
 	})
-	
+
 	# --------------------------------------------------
 	# Activar módulos cuando el usuario está logueado
 	# --------------------------------------------------
-observeEvent(app_state$logged, {
-  if (isTRUE(app_state$logged)) {
+	observeEvent(app_state$logged, {
+	if (isTRUE(app_state$logged)) {
 
-    output$main_content <- renderUI({
-      clientes_ui("clientes")
-    })
+		output$main_content <- renderUI({
+			clientes_ui("clientes")
+		})
 
-    clientes_server("clientes")
-    inventario_server("inventario")
-  }
-})
-
+		clientes_server("clientes")
+			inventario_server("inventario")
+		}
+	})
+		
 
 
 

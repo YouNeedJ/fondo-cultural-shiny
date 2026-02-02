@@ -193,9 +193,26 @@ eliminar_libro_por_isbn <- function(isbn) {
   TRUE
 }
 
-	normalizar_isbn <- function(x) {
-	  x <- trimws(as.character(x))
-	  x <- toupper(x)
-	  # deja solo dígitos y X
-	  gsub("[^0-9X]", "", x)
-	}
+normalizar_isbn <- function(x) {
+	x <- trimws(as.character(x))
+	x <- toupper(x)
+	# deja solo dígitos y X
+	gsub("[^0-9X]", "", x)
+}
+
+get_inventario_completo <- function() {
+	inv <- .get_inventario_collection()
+	inv$find()
+}
+
+fix_encoding <- function(df) {
+  df[] <- lapply(df, function(x) {
+    if (is.character(x)) {
+      iconv(x, from = "UTF-8", to = "latin1", sub = "")
+    } else {
+      x
+    }
+  })
+  df
+}
+
