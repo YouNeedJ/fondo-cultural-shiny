@@ -508,6 +508,35 @@ showModal(
 
 })
 
+# ====== ESTADÍSTICAS ======
+
+inventario_data <- reactive({
+  mongo_find("inventario")
+})
+
+totales <- reactive({
+  df <- inventario_data()
+
+  list(
+    activos = sum(df[["TOTAL ACTIVOS  $"]], na.rm = TRUE),
+    clientes = sum(df[["TOTAL CLIENTES $"]], na.rm = TRUE),
+    disponible = sum(df[["DISPONIBLE EN $"]], na.rm = TRUE)
+  )
+})
+
+output$stat_activos <- renderText({
+  paste0("$ ", format(totales()$activos, big.mark = ","))
+})
+
+output$stat_clientes <- renderText({
+  paste0("$ ", format(totales()$clientes, big.mark = ","))
+})
+
+output$stat_disponible <- renderText({
+  paste0("$ ", format(totales()$disponible, big.mark = ","))
+})
+
+
 
   })
 }

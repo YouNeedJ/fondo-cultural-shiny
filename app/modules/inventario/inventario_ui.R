@@ -70,12 +70,16 @@ inventario_ui <- function(id) {
 	  )
 	),
 
-    nav_panel(
-      title = "Estadísticas",
-      div(class="text-center my-4",
-          h4("Estadísticas", class="fw-bold"),
-          p("Pendiente: gráficas y tablas solicitadas", class="text-muted")
-      )
-    )
+nav_panel(
+  title = "Estadísticas",
+
+  fluidRow(
+    column(4, h5("Total activos"), textOutput("stat_activos")),
+    column(4, h5("En clientes"), textOutput("stat_clientes")),
+    column(4, h5("Disponible"), textOutput("stat_disponible"))
+  )
+)
+
+
   )
 }
